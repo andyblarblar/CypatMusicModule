@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using Console = Colorful.Console;
 
@@ -399,6 +400,32 @@ namespace CypatMusicModule
 
         public static void PlaySongs()
         {
+            void ffmpegPlay(string filepath2)
+            {
+                var ffplayOptions = new ProcessStartInfo(".\\ffplay.exe", $"-nodisp \"{filepath2}\"")
+                {
+                    CreateNoWindow = true,
+                };
+
+                Process ffplay = Process.Start(ffplayOptions);
+                ffplay.Exited += (sender, args) => ffplay.Dispose();
+                return;
+            }//TODO add an event to close all prosesses
+
+            void soxPlay(string filepath)
+            {
+                var soxOptions = new ProcessStartInfo("play", $"\'filepath\'")
+                {
+                    CreateNoWindow = true
+                };
+
+                Process sox = Process.Start(soxOptions);
+                sox.Exited += (sender, args) => sox.Dispose();
+                return;
+
+            }
+
+
             var isLinux = Environment.OSVersion.Platform == PlatformID.Unix;
 
             if (isLinux)
@@ -417,27 +444,31 @@ namespace CypatMusicModule
                         filepath = Console.ReadLine(); 
                         break;
 
+                    case ">:]":
+                        Console.WriteLine("please enter the file path");
+                        filepath = Console.ReadLine();
+                        for (int i = 0; i < 10; i++)
+                        {
+                            soxPlay(filepath);
+                            Thread.Sleep(1000);
+                        }
+                        break;
+
                     default:
                         Console.WriteLine("Bad input, exiting...");
                         return;
 
                 }
 
-                var soxOptions = new ProcessStartInfo("play", $"\'filepath\'")
-                {
-                    CreateNoWindow = true
-                };
-
-                Process sox = Process.Start(soxOptions);
-                sox.Exited += (sender, args) => sox.Dispose(); 
-                return;
+               soxPlay(filepath);
 
             }
 
 
             var input2 = string.Empty;
             Console.WriteLine("select a song to play:\n" +
-                              "C) custom file\n");
+                              "C) custom file\n" +
+                              ">:]) above BUT BETTER >:]");
             input2 = Console.ReadLine();
             var filepath2 = string.Empty;
 
@@ -449,21 +480,24 @@ namespace CypatMusicModule
                     filepath2 = Console.ReadLine();
                     break;
 
+                case ">:]":
+                    Console.WriteLine("please enter the file path");
+                    filepath2 = Console.ReadLine();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        ffmpegPlay(filepath2);
+                        Thread.Sleep(1000);
+                    }
+                    break;
+
+
                 default:
                     Console.WriteLine("Bad input, exiting...");
                     return;
 
             }
 
-            var ffplayOptions = new ProcessStartInfo(".\\ffplay.exe", $"-nodisp \"{filepath2}\"")
-            {
-                CreateNoWindow = true,
-            };
-
-            Process ffplay = Process.Start(ffplayOptions);
-            
-            ffplay.Exited += (sender, args) => ffplay.Dispose();
-            return;
+            ffmpegPlay(filepath2);
         }
 
 }
