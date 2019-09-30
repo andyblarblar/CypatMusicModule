@@ -17,7 +17,7 @@ namespace CypatMusicModule
     class Program
     {
         static void Main(string[] args)
-        {
+        { 
             Console.WriteLine(@"                   
                         +It.             
                         +II+             
@@ -110,8 +110,8 @@ namespace CypatMusicModule
                 return false;
             }
 
-        }
-
+        } 
+        
         /// <summary>
     ///  Prompts console with options to replace the default Cypat sounds with, and then replaces.
     /// </summary>
@@ -386,16 +386,15 @@ namespace CypatMusicModule
 
 
         public static void ListCustomFiles()
-    {
+        {
 
-    var files = Directory.GetFiles("musicFiles");
-        foreach (var file in files)
-    {
-        Console.WriteLine(file.Split("\\")[1]);
-
-    }
-        Console.WriteLine();
-    }
+        var files = Directory.GetFiles("musicFiles");
+            foreach (var file in files)
+        {
+            Console.WriteLine(file);
+        }
+            Console.WriteLine();
+        }
 
 
         public static void PlaySongs()
@@ -433,7 +432,7 @@ namespace CypatMusicModule
                 var input = string.Empty;
                 Console.WriteLine("select a song to play:\n" +
                                   "C) custom file\n");
-                input = Console.ReadLine();
+                input = Console.ReadLine().Trim();
                 var filepath = string.Empty;
 
                 switch (input)
@@ -447,7 +446,7 @@ namespace CypatMusicModule
                     case ">:]":
                         Console.WriteLine("please enter the file path");
                         filepath = Console.ReadLine();
-                        for (int i = 0; i < 10; i++)
+                        for (int i = 0; i < 4; i++)
                         {
                             soxPlay(filepath);
                             Thread.Sleep(1000);
@@ -469,7 +468,7 @@ namespace CypatMusicModule
             Console.WriteLine("select a song to play:\n" +
                               "C) custom file\n" +
                               ">:]) above BUT BETTER >:]");
-            input2 = Console.ReadLine();
+            input2 = Console.ReadLine().Trim();
             var filepath2 = string.Empty;
 
             switch (input2)
@@ -483,7 +482,7 @@ namespace CypatMusicModule
                 case ">:]":
                     Console.WriteLine("please enter the file path");
                     filepath2 = Console.ReadLine();
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < 4; i++)
                     {
                         ffmpegPlay(filepath2);
                         Thread.Sleep(1000);
