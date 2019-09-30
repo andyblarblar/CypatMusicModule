@@ -13,7 +13,7 @@ using Console = Colorful.Console;
 namespace CypatMusicModule
 {
 
-#nullable enable
+
     class Program
     {
         public delegate void ProcessState();
@@ -92,7 +92,14 @@ namespace CypatMusicModule
                         break;
 
                     case "3":
-                        PlaySongs();
+                        try
+                        {
+                            PlaySongs();
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("bad path, exiting...");
+                        }
                         break;
 
                     case "~":
@@ -102,12 +109,7 @@ namespace CypatMusicModule
                         break;
 
                     case "Q":
-
-                        if (!OnClose.Equals(null))
-                        {
-                            OnClose();
-                        }
-
+                        OnClose?.Invoke();
                         return true;
 
                     default:
