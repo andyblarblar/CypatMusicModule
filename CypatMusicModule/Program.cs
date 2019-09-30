@@ -16,6 +16,9 @@ namespace CypatMusicModule
 #nullable enable
     class Program
     {
+        public delegate void ProcessState();
+        public static event ProcessState OnClose;// subscribers will be invoked upon user entering "Q" 
+
         static void Main(string[] args)
         { 
             Console.WriteLine(@"                   
@@ -99,6 +102,12 @@ namespace CypatMusicModule
                         break;
 
                     case "Q":
+
+                        if (!OnClose.Equals(null))
+                        {
+                            OnClose();
+                        }
+
                         return true;
 
                     default:
@@ -407,9 +416,16 @@ namespace CypatMusicModule
                 };
 
                 Process ffplay = Process.Start(ffplayOptions);
+
+                Program.OnClose += () =>
+                { 
+                    ffplay.Kill();
+                    ffplay.Dispose();
+                };
                 ffplay.Exited += (sender, args) => ffplay.Dispose();
+
                 return;
-            }//TODO add an event to close all prosesses
+            }
 
             void soxPlay(string filepath)
             {
@@ -419,7 +435,14 @@ namespace CypatMusicModule
                 };
 
                 Process sox = Process.Start(soxOptions);
+
+                Program.OnClose += () =>
+                {
+                    sox.Kill();
+                    sox.Dispose();
+                };
                 sox.Exited += (sender, args) => sox.Dispose();
+                
                 return;
 
             }
@@ -499,7 +522,8 @@ namespace CypatMusicModule
             ffmpegPlay(filepath2);
         }
 
-}
+       
+    }
 
 }
 
