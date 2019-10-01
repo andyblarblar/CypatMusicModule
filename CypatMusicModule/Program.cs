@@ -75,6 +75,7 @@ namespace CypatMusicModule
                                   "2) list available sounds\n" +
                                   "3) play songs\n" +
                                   "~) Custom sounds guidelines\n" +
+                                  "E) stop playing all music\n" +
                                   "Q) quit\n");
                 var UI = "";
 
@@ -106,6 +107,10 @@ namespace CypatMusicModule
                         Console.WriteLine(
                             "\n\n\nto use your oun files you must: \n1) you MUST have a file in a proper .wav format\n2) place this file in \"musicFiles\" \n3) be sure to enter \".wav\" when you enter its name\n",
                             Color.HotPink);
+                        break;
+
+                    case "E":
+                        OnClose?.Invoke();
                         break;
 
                     case "Q":
@@ -420,10 +425,26 @@ namespace CypatMusicModule
                 Process ffplay = Process.Start(ffplayOptions);
 
                 Program.OnClose += () =>
-                { 
-                    ffplay.Kill();
-                    ffplay.Dispose();
+                {
+                    try
+                    {
+                        ffplay.Kill();
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+
+                    try
+                    {
+                        ffplay.Dispose();
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
                 };
+
                 ffplay.Exited += (sender, args) => ffplay.Dispose();
 
                 return;
@@ -440,9 +461,25 @@ namespace CypatMusicModule
 
                 Program.OnClose += () =>
                 {
-                    sox.Kill();
-                    sox.Dispose();
+                    try
+                    {
+                        sox.Kill();
+                    }
+                    catch (Exception e)
+                    {
+                        // ignored
+                    }
+
+                    try
+                    {
+                        sox.Dispose();
+                    }
+                    catch (Exception e)
+                    {
+                        // ignored
+                    }
                 };
+
                 sox.Exited += (sender, args) => sox.Dispose();
                 
                 return;
@@ -486,6 +523,7 @@ namespace CypatMusicModule
 
                soxPlay(filepath);
 
+               return;
             }
 
 
